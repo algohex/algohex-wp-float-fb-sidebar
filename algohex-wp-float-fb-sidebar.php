@@ -17,12 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 // activation
 function alffs_plugin_activation() {
 
-	// add css and js
-	// wp_register_style( 'css-bootstrap', plugins_url( __FILE__, 'includes/css/bootstrap.min.css' ) );
-	// wp_enqueue_style( 'css-bootstrap' );
-	// wp_register_script( 'js-bootstrap', plugins_url( __FILE__, 'includes/js/bootstrap.min.js' ) );
-	// wp_enqueue_style( 'js-bootstrap' );
-
 	// add facebook page url options
 	add_option(
 		  'alffs_facebook_page_url'
@@ -82,7 +76,7 @@ function alffs_options_page_html () {
 
 
 		?>
-		<iframe src=<?php echo $src; ?> width="340" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
+		<iframe src="<?php echo $src; ?>" width="340" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
 		<?php
 	}
 	?>
