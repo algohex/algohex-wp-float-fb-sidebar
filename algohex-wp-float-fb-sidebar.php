@@ -24,6 +24,13 @@ function alffs_plugin_activation() {
 		, $deprecated = ''
 		, $autoload   = 'yes'
 	);
+	// floating bar position
+	add_option(
+		  'alffs_facebook_floating_position'
+		, $value      = 'right'
+		, $deprecated = ''
+		, $autoload   = 'yes'
+	);
 
 	flush_rewrite_rules();
 }
@@ -66,18 +73,17 @@ function alffs_options_page_html () {
 	}
 	$options = new Options;
 
+	// update options
 	if ( ! empty( $_POST ) ) {
-		print_r( $_POST );
 
-		$src = 'https://www.facebook.com/plugins/page.php?href='
-			. $_POST['facebookPageUrl']
-			. '&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=291823838192298'
-		;
+		if ( ! empty( $_POST[ 'facebookPageUrl' ] ) ) {
+			update_option( 'alffs_facebook_page_url', $_POST['facebookPageUrl'] );
+		}
 
+		if ( ! empty( $_POST[ 'facebookFloatingPostion' ] ) ) {
+			update_option( 'alffs_facebook_floating_position', $_POST['facebookFloatingPostion'] );
+		}
 
-		?>
-		<iframe src="<?php echo $src; ?>" width="340" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
-		<?php
 	}
 	?>
 
@@ -100,6 +106,18 @@ function alffs_options_page_html () {
 						</td>
 					</tr>
 
+					<tr>
+						<td width="20%">
+							<label>Floating Position</label>
+						</td>
+						<td>
+							<select name="facebookFloatingPostion">
+								<option value="left" <?php if ( $options->getFacebookFloatingPosition() == 'left' ) echo 'selected="selected"'; ?>>Left</option>
+								<option value="right" <?php if ( $options->getFacebookFloatingPosition() == 'right' ) echo 'selected="selected"'; ?>>Right</option>
+							</select>
+						</td>
+					</tr>
+
 				</tbody>
 			</table>
 
@@ -111,3 +129,76 @@ function alffs_options_page_html () {
 
 	<?php
 }
+
+function alffs_frontend_hook() {
+	$options = new Options;
+
+	$src = 'https://www.facebook.com/plugins/page.php?href='
+			. $options->getFacebookPageUrl()
+			. '&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=291823838192298'
+		;
+
+	?>
+
+	<style type="text/css">
+		.algohexFbIcon:hover {
+			cursor: pointer;
+		}
+	</style>
+
+	<div class="algohex-floating-facebook" id="algohexFbDiv" style="
+		position                                              : fixed;
+		z-index                                               : 999999;
+		<?php echo $options->getFacebookFloatingPosition() ?> : -340px;
+		top                                                   : 20%;
+		-webkit-transition                                    : 0.5s;
+		transition                                            : 0.5s;
+	">
+		<?php if ( $options->getFacebookFloatingPosition() == 'right' ) { ?>
+		<div class="algohexFbIcon" onclick="algohexFbIcon()">
+			<img
+				style  = "position: absolute; left: -40px; background-color: white;"
+				src    = "<?php echo plugin_dir_url( __FILE__ ) . '/images/facebook-icon.png'?>"
+				alt    = "Algohex Facebook Icon"
+				width  = "40"
+				height = "40"
+			/>
+		</div>
+		<?php } ?>
+		<iframe
+			src               = "<?php echo $src; ?>"
+			width             = "340"
+			height            = "450"
+			style             = "border:none;overflow:hidden"
+			scrolling         = "no"
+			frameborder       = "0"
+			allowTransparency = "true"
+			allow             = "encrypted-media"
+		></iframe>
+		<?php if ( $options->getFacebookFloatingPosition() == 'left' ) { ?>
+		<div class="algohexFbIcon" onclick="algohexFbIcon()">
+			<img
+				style  = "position: absolute; right: -40px; top: 0; background-color: white;"
+				src    = "<?php echo plugin_dir_url( __FILE__ ) . '/images/facebook-icon.png'?>"
+				alt    = "Algohex Facebook Icon"
+				width  = "40"
+				height = "40"
+			/>
+		</div>
+		<?php } ?>
+	</div>
+
+	<script type="text/javascript">
+		function algohexFbIcon() {
+			var element = document.getElementById( 'algohexFbDiv' );
+			if ( element.style.<?php echo $options->getFacebookFloatingPosition() ?> != '0px' ) {
+				element.style.<?php echo $options->getFacebookFloatingPosition() ?> = '0px';
+			} else {
+				element.style.<?php echo $options->getFacebookFloatingPosition() ?> = '-340px';
+			}
+		}
+	</script>
+
+	<?php
+}
+add_action( 'get_footer', 'alffs_frontend_hook' );
