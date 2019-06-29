@@ -31,6 +31,13 @@ function alffs_plugin_activation() {
 		, $deprecated = ''
 		, $autoload   = 'yes'
 	);
+	// facebook icon option
+	add_option(
+		  'alffs_facebook_floating_icon'
+		, $value      = '1'
+		, $deprecated = ''
+		, $autoload   = 'yes'
+	);
 
 	flush_rewrite_rules();
 }
@@ -39,6 +46,8 @@ register_activation_hook( __FILE__, 'alffs_plugin_activation' );
 // deactivation
 function alffs_plugin_deactivation() {
 	delete_option( 'alffs_facebook_page_url' );
+	delete_option( 'alffs_facebook_floating_position' );
+	delete_option( 'alffs_facebook_floating_icon' );
 
 	flush_rewrite_rules();
 }
@@ -84,6 +93,10 @@ function alffs_options_page_html () {
 			update_option( 'alffs_facebook_floating_position', $_POST['facebookFloatingPostion'] );
 		}
 
+		if ( ! empty( $_POST[ 'facebookFloatingIcon' ] ) ) {
+			update_option( 'alffs_facebook_floating_icon', $_POST['facebookFloatingIcon'] );
+		}
+
 	}
 	?>
 
@@ -115,6 +128,17 @@ function alffs_options_page_html () {
 								<option value="left" <?php if ( $options->getFacebookFloatingPosition() == 'left' ) echo 'selected="selected"'; ?>>Left</option>
 								<option value="right" <?php if ( $options->getFacebookFloatingPosition() == 'right' ) echo 'selected="selected"'; ?>>Right</option>
 							</select>
+						</td>
+					</tr>
+
+					<tr>
+						<td width="20%">
+							<label>Floating Icon</label>
+						</td>
+						<td>
+							<input type="radio" name="facebookFloatingIcon" value="1" <?php if ( $options->getFacebookFloatingIcon() == '1' ) echo 'checked'; ?>> <img src="<?php echo plugin_dir_url( __FILE__ ) . '/images/ficon1.png' ?>" alt="Aloghex Facebook Icon 1" /> <br>
+							<input type="radio" name="facebookFloatingIcon" value="2" <?php if ( $options->getFacebookFloatingIcon() == '2' ) echo 'checked'; ?>> <img src="<?php echo plugin_dir_url( __FILE__ ) . '/images/ficon2.png' ?>" alt="Aloghex Facebook Icon 2" /> <br>
+							<input type="radio" name="facebookFloatingIcon" value="3" <?php if ( $options->getFacebookFloatingIcon() == '3' ) echo 'checked'; ?>> <img src="<?php echo plugin_dir_url( __FILE__ ) . '/images/ficon3.png' ?>" alt="Aloghex Facebook Icon 3" />
 						</td>
 					</tr>
 
@@ -158,10 +182,8 @@ function alffs_frontend_hook() {
 		<div class="algohexFbIcon" onclick="algohexFbIcon()">
 			<img
 				style  = "position: absolute; left: -40px; background-color: white;"
-				src    = "<?php echo plugin_dir_url( __FILE__ ) . '/images/facebook-icon.png'?>"
+				src    = "<?php echo plugin_dir_url( __FILE__ ) . '/images/ficon' . $options->getFacebookFloatingIcon() . '.png'?>"
 				alt    = "Algohex Facebook Icon"
-				width  = "40"
-				height = "40"
 			/>
 		</div>
 		<?php } ?>
@@ -179,10 +201,8 @@ function alffs_frontend_hook() {
 		<div class="algohexFbIcon" onclick="algohexFbIcon()">
 			<img
 				style  = "position: absolute; right: -40px; top: 0; background-color: white;"
-				src    = "<?php echo plugin_dir_url( __FILE__ ) . '/images/facebook-icon.png'?>"
+				src    = "<?php echo plugin_dir_url( __FILE__ ) . '/images/ficon' . $options->getFacebookFloatingIcon() . '.png'?>"
 				alt    = "Algohex Facebook Icon"
-				width  = "40"
-				height = "40"
 			/>
 		</div>
 		<?php } ?>
