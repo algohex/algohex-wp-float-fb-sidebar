@@ -12,15 +12,24 @@ class Options {
 	private $faecbook_page_url_option_name;
 	private $option_page_title;
 	private $facebook_floating_postion;
+	private $facebook_floating_icon;
 
 	function __construct() {
 		$this->facebook_page_url             = 'https://www.facebook.com/facebook/';
 		$this->facebook_page_url_option_name = 'alffs_facebook_page_url';
 		$this->option_page_title             = 'Floating Facebook Sidebar';
 		$this->facebook_floating_postion     = 'right';
+		$this->facebook_floating_icon         = '1';
 	}
 
 	// getter and setter
+	function setFacebookFloatingIcon( $facebook_floating_icon ) {
+		$this->facebook_floating_icon = $facebook_floating_icon;
+	}
+	function getFacebookFloatingIcon() {
+		return get_option( 'alffs_facebook_floating_icon' );
+	}
+
 	function setFacebookFloatingPostion( $facebook_floating_postion ) {
 		$this->facebook_floating_postion = $facebook_floating_postion;
 	}
