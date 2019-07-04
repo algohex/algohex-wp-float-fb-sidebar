@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Floating Facebook Sidebar Options
+ * Floating Sidebar for Facebook Options
  */
 class Options {
 
@@ -17,7 +17,7 @@ class Options {
 	function __construct() {
 		$this->facebook_page_url             = 'https://www.facebook.com/facebook/';
 		$this->facebook_page_url_option_name = 'alffs_facebook_page_url';
-		$this->option_page_title             = 'Floating Facebook Sidebar';
+		$this->option_page_title             = 'Floating Sidebar for Facebook';
 		$this->facebook_floating_postion     = 'right';
 		$this->facebook_floating_icon         = '1';
 	}
