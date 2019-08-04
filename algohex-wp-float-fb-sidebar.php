@@ -66,7 +66,7 @@ function alffs_options_page() {
 		, 'manage_options'
 		, 'alffs'
 		, 'alffs_options_page_html'
-		, plugin_dir_url(__FILE__) . 'images/algohex-enterprise-icon-white.png'
+		, 'dashicons-groups'
 		, 80
 	);
 }
